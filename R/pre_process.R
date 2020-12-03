@@ -9,9 +9,10 @@
 #' @param z_calibrat Site elevation above sea level of solar radiation series for calibrating (m)
 #' @param GHI_threshold Upper limit of GHI series (same units that Target). For automatic calulation from observed data, set it to -99
 #' @param DNI_threshold Upper limit of DNI series (same units that Target). For automatic calulation from observed data, set it to -99
-
 #'
 #' @return Dataframe object including time and site adapted solar irradiance series
+#'
+#' @references Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
 #'
 #' @export
 #' @import glmulti
@@ -41,18 +42,51 @@ pre_process <- function(subset_target_period,
   #--------------------------------------------------------------------------------------------------------------------------
   # Non-dimensional parameters
   # Calibrating period
-  subset_calibrating_period$KT_model = subset_calibrating_period$GHI.mod / subset_calibrating_period$Top_irradiance
-  subset_calibrating_period$KT_measured = subset_calibrating_period$GHI.obs / subset_calibrating_period$Top_irradiance
+  subset_calibrating_period$KT_model = rep(0.5, length(subset_calibrating_period$GHI.mod))
+  subset_calibrating_period$KT_model[which(subset_calibrating_period$Top_irradiance > 1)] =
+    subset_calibrating_period$GHI.mod[which(subset_calibrating_period$Top_irradiance > 1)] /
+    subset_calibrating_period$Top_irradiance[which(subset_calibrating_period$Top_irradiance > 1)]
+
+
+  subset_calibrating_period$KT_measured =rep(0.5, length(subset_calibrating_period$GHI.mod))
+  subset_calibrating_period$KT_measured[which(subset_calibrating_period$Top_irradiance > 1)] =
+    subset_calibrating_period$GHI.obs[which(subset_calibrating_period$Top_irradiance > 1)] /
+    subset_calibrating_period$Top_irradiance[which(subset_calibrating_period$Top_irradiance > 1)]
+
+
   subset_calibrating_period$KT_measured_modified = subset_calibrating_period$KT_measured / (1.031*exp( -1.4/(0.9 + 9.4/subset_calibrating_period$air_mass_kasten)      )   + 0.1)
   subset_calibrating_period$KT_model_modified = subset_calibrating_period$KT_model / (1.031*exp( -1.4/(0.9 + 9.4/subset_calibrating_period$air_mass_kasten)      )   + 0.1)
-  subset_calibrating_period$kd_measured = (subset_calibrating_period$GHI.obs - subset_calibrating_period$DNI.obs * sin(subset_calibrating_period$Elev*pi/180))/subset_calibrating_period$GHI.obs
-  subset_calibrating_period$kd_model = (subset_calibrating_period$GHI.mod - subset_calibrating_period$DNI.mod * sin(subset_calibrating_period$Elev*pi/180))/subset_calibrating_period$GHI.mod
+
+  subset_calibrating_period$kd_measured = rep(0.8, length(subset_calibrating_period$GHI.mod))
+  subset_calibrating_period$kd_measured[which(subset_calibrating_period$GHI.obs > 1)] =
+    (subset_calibrating_period$GHI.obs[which(subset_calibrating_period$GHI.obs > 1)] -
+       subset_calibrating_period$DNI.obs[which(subset_calibrating_period$GHI.obs > 1)] *
+       sin(subset_calibrating_period$Elev[which(subset_calibrating_period$GHI.obs > 1)]*pi/180))/
+    subset_calibrating_period$GHI.obs[which(subset_calibrating_period$GHI.obs > 1)]
+
+  subset_calibrating_period$kd_model =  rep(0.8, length(subset_calibrating_period$GHI.mod))
+  subset_calibrating_period$kd_model[which(subset_calibrating_period$GHI.mod > 1)] =
+    (subset_calibrating_period$GHI.mod[which(subset_calibrating_period$GHI.mod > 1)] -
+       subset_calibrating_period$DNI.mod[which(subset_calibrating_period$GHI.mod > 1)] *
+       sin(subset_calibrating_period$Elev[which(subset_calibrating_period$GHI.mod > 1)]*pi/180))/
+    subset_calibrating_period$GHI.mod[which(subset_calibrating_period$GHI.mod > 1)]
+
   subset_calibrating_period = subset_calibrating_period[which(subset_calibrating_period$kd_measured > 0),]
   subset_calibrating_period = subset_calibrating_period[which(subset_calibrating_period$kd_measured <= 1),]
 
   # Target period
-  subset_target_period$KT_model = subset_target_period$GHI.mod / subset_target_period$Top_irradiance
-  subset_target_period$kd_model = (subset_target_period$GHI.mod - subset_target_period$DNI.mod * sin(subset_target_period$Elev*pi/180))/subset_target_period$GHI.mod
+  subset_target_period$KT_model = rep(0.5, length(subset_target_period$GHI.mod))
+  subset_target_period$KT_model[which(subset_target_period$Top_irradiance > 1)] =
+    subset_target_period$GHI.mod[which(subset_target_period$Top_irradiance > 1)] /
+    subset_target_period$Top_irradiance[which(subset_target_period$Top_irradiance > 1)]
+
+  subset_target_period$kd_model = rep(0.8, length(subset_target_period$GHI.mod))
+  subset_target_period$kd_model[which(subset_target_period$GHI.mod > 1)] =
+    (subset_target_period$GHI.mod[which(subset_target_period$GHI.mod > 1)] -
+       subset_target_period$DNI.mod[which(subset_target_period$GHI.mod > 1)] *
+       sin(subset_target_period$Elev[which(subset_target_period$GHI.mod > 1)]*pi/180))/
+    subset_target_period$GHI.mod[which(subset_target_period$GHI.mod > 1)]
+
   subset_target_period$KT_model_modified = subset_target_period$KT_model / (1.031*exp( -1.4/(0.9 + 9.4/subset_target_period$air_mass_kasten)      )   + 0.1)
 
   # DHI

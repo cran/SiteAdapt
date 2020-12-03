@@ -52,14 +52,6 @@ Site Adaptation of Solar Irradiance Modeled Series with Coincident Ground Measur
    data(calibration_2016) # Measured from BSRN
    data(target_2013_2016) # Provided by CAMS-RAD service
 
-observed_2013_2016$time = as.POSIXct(
-paste(observed_2013_2016$Year, "-",
-observed_2013_2016$Month, "-",
-observed_2013_2016$Day, " ",
-observed_2013_2016$Hour, ":",
-observed_2013_2016$Minute, sep=""),
-tz ="UTC")
-
 target_2013_2016$time = as.POSIXct(
 paste(target_2013_2016$Year, "-",
 target_2013_2016$Month, "-",
@@ -95,6 +87,15 @@ site_adapted_series$Day, " ",
 site_adapted_series$Hour, ":",
 site_adapted_series$Minute, sep=""),
 tz ="UTC")
+
+observed_2013_2016$time = as.POSIXct(
+paste(observed_2013_2016$Year, "-",
+observed_2013_2016$Month, "-",
+observed_2013_2016$Day, " ",
+observed_2013_2016$Hour, ":",
+observed_2013_2016$Minute, sep=""),
+tz ="UTC")
+
 
 meas_model = merge(observed_2013_2016[,6:9],
 target_2013_2016[,c(6:9,11)],
@@ -224,4 +225,7 @@ rmse(meas_model_adapt$DHI_adapted,meas_model_adapt$DHI.obs)}
 
 
 
+}
+\references{
+Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
 }

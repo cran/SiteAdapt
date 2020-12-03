@@ -25,3 +25,6 @@ Dataframe object including time and site adapted solar irradiance series
 \description{
 DNI under clear sky conditions (Solar Energy, 82(8), 758-762)
 }
+\references{
+Ineichen, P. A broadband simplified version of the Solis clear sky model. Sol. Energy 2008, 82, 758–762.
+}

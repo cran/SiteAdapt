@@ -10,6 +10,8 @@
 #'
 #' @return Dataframe object including time and site adapted solar irradiance series
 #'
+#' @references Ineichen, P. A broadband simplified version of the Solis clear sky model. Sol. Energy 2008, 82, 758–762.
+#'
 #' @export
 
 

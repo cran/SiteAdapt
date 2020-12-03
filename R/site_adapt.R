@@ -13,6 +13,8 @@
 #'
 #' @return Dataframe object including time and site adapted solar irradiance series
 #'
+#' @references Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
+#'
 #' @examples
 #' # A site located in the the Namib Desert of Namibia (Gobabeb, GOB) is selected
 #'
@@ -23,14 +25,6 @@
 #'  # Load calibration and modeled datasets
 #'    data(calibration_2016) # Measured from BSRN
 #'    data(target_2013_2016) # Provided by CAMS-RAD service
-#'
-#' observed_2013_2016$time = as.POSIXct(
-#' paste(observed_2013_2016$Year, "-",
-#' observed_2013_2016$Month, "-",
-#' observed_2013_2016$Day, " ",
-#' observed_2013_2016$Hour, ":",
-#' observed_2013_2016$Minute, sep=""),
-#' tz ="UTC")
 #'
 #' target_2013_2016$time = as.POSIXct(
 #' paste(target_2013_2016$Year, "-",
@@ -67,6 +61,16 @@
 #' site_adapted_series$Hour, ":",
 #' site_adapted_series$Minute, sep=""),
 #' tz ="UTC")
+#'
+#' observed_2013_2016$time = as.POSIXct(
+#' paste(observed_2013_2016$Year, "-",
+#' observed_2013_2016$Month, "-",
+#' observed_2013_2016$Day, " ",
+#' observed_2013_2016$Hour, ":",
+#' observed_2013_2016$Minute, sep=""),
+#' tz ="UTC")
+#'
+
 #'
 #' meas_model = merge(observed_2013_2016[,6:9],
 #' target_2013_2016[,c(6:9,11)],
@@ -220,8 +224,8 @@ site_adapt <- function(Target,latitude_target,z_target,
   target_period = Target[which(Target$Elev > threshold),]
 
 # Definition of turbidity thresholds
-  threshold_aod_380 = 0.11
-  threshold_aod_500 = 0.15
+  threshold_aod_380 = 0.45 #0.11
+  threshold_aod_500 = 0.45 #0.15
 
 # Separation of clear and cloud conditions for the target period
   target_period$time = as.POSIXct(paste(target_period$Year, "-",
@@ -231,10 +235,10 @@ site_adapt <- function(Target,latitude_target,z_target,
                                 target_period$Minute, sep=""),
                                 tz = timezone)
   top = TOA(latitude_target,target_period$Elev,target_period$time)
-  clear_sky_target_DNI = SOLIS(top,target_period$Elev,
+  clear_sky_target_DNI = SOLIS(top/(sin(target_period$Elev*pi/180)),target_period$Elev,
                                  aod_380 = rep(threshold_aod_380, length(target_period$Minute)),
                                  aod_500 = rep(threshold_aod_500, length(target_period$Minute)),
-                                 w = rep(1, length(target_period$Minute)),
+                                 w = rep(10, length(target_period$Minute)),
                                  latitude_target)
   clear_data_target = which(target_period$DNI.mod >= clear_sky_target_DNI)
   cloud_data_target = which(target_period$DNI.mod < clear_sky_target_DNI)
@@ -309,6 +313,13 @@ site_adapt <- function(Target,latitude_target,z_target,
 
 # Data below the solar elevation threshold
   Target_data_below_threshold = Target[which(Target$Elev <= threshold), ]
+
+  Target_data_below_threshold$DHI.mod = Target_data_below_threshold$GHI.mod
+  Target_data_below_threshold$DHI.mod[which(Target_data_below_threshold$Elev > 1)] =
+    Target_data_below_threshold$GHI.mod[which(Target_data_below_threshold$Elev > 1)]-
+    Target_data_below_threshold$DNI.mod[which(Target_data_below_threshold$Elev > 1)]*
+    sin(Target_data_below_threshold$Elev[which(Target_data_below_threshold$Elev > 1)])
+
 
   df_below_threshold = data.frame(
     Year = Target_data_below_threshold$Year,

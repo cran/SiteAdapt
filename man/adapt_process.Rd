@@ -38,3 +38,6 @@ Dataframe object including time and site adapted solar irradiance series
 \description{
 Site adaptation of solar irradiance modeled series with coincident ground measurements
 }
+\references{
+Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
+}

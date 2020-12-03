@@ -4,7 +4,9 @@
 \name{target_2013_2016}
 \alias{target_2013_2016}
 \title{Dataframe object with modeled solar radiation series.}
-\format{An object of class \code{"data.frame"}.}
+\format{
+An object of class \code{"data.frame"}.
+}
 \source{
 BSRN
 }

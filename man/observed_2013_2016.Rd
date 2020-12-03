@@ -4,7 +4,9 @@
 \name{observed_2013_2016}
 \alias{observed_2013_2016}
 \title{Dataframe object with ground measured solar radiation.}
-\format{An object of class \code{"data.frame"}.}
+\format{
+An object of class \code{"data.frame"}.
+}
 \source{
 BSRN
 }
@@ -13,10 +15,5 @@ data(observed_2013_2016)
 }
 \description{
 The Dataframe includes time and solar irradiance measured series.
-}
-\references{
-Fernandez-Peruchena, C. M. et al (2020).
-Site-adaptation of modeled solar radiation data: The SiteAdapt procedure.
-Remote Sensing.
 }
 \keyword{datasets}

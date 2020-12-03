@@ -10,10 +10,6 @@
 #'
 #' @keywords datasets
 #'
-#' @references Fernandez-Peruchena, C. M. et al (2020).
-#' Site-adaptation of modeled solar radiation data: The SiteAdapt procedure.
-#' Remote Sensing.
-#'
 #' @source BSRN
 #'
 "observed_2013_2016"

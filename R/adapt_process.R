@@ -12,6 +12,8 @@
 #'
 #' @return Dataframe object including time and site adapted solar irradiance series
 #'
+#' @references Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
+#'
 #' @export
 #' @import glmulti
 #' @import solaR
@@ -75,7 +77,7 @@ adapt_process <- function(subset_target_period,latitude_target,z_target,
                                            hindcast_ajuste,
                                            obs_ajuste,
                                            method = 'eqm',
-                                           extrapolate = "no")
+                                           extrapolate = "constant")
   GHI_Locally_adapted = GHI_adaptation_output$GHI.mod
 
   #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -94,8 +96,7 @@ adapt_process <- function(subset_target_period,latitude_target,z_target,
                                                hindcast_ajuste,
                                                obs_ajuste,
                                                method = 'eqm',
-                                               #method = 'scaling',
-                                               extrapolate = "no")
+                                               extrapolate = "constant")
   DNI_Fit = DNI_adaptation_output$DNI.mod
 
   #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -114,8 +115,7 @@ adapt_process <- function(subset_target_period,latitude_target,z_target,
                                                hindcast_ajuste,
                                                obs_ajuste,
                                                method = 'eqm',
-                                               #method = 'scaling',
-                                               extrapolate = "no") # este es el mejor
+                                               extrapolate = "constant")
   DHI_Fit = DHI_adaptation_output$DHI.mod
 
   #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

@@ -4,7 +4,9 @@
 \name{calibration_2016}
 \alias{calibration_2016}
 \title{Dataframe object with solar radiation series for calibration.}
-\format{An object of class \code{"data.frame"}.}
+\format{
+An object of class \code{"data.frame"}.
+}
 \source{
 BSRN and CAMSRad service
 }
@@ -16,8 +18,6 @@ The Dataframe includes time, modeled and measured solar irradiance,
 modeled clear sky index and solar elevation (degrees).
 }
 \references{
-Fernandez-Peruchena, C. M. et al (2020).
-Site-adaptation of modeled solar radiation data: The SiteAdapt procedure.
-Remote Sensing.
+Fernández-Peruchena, C.M.; Polo, J.; Martín, L.; Mazorra, L. Site-Adaptation of Modeled Solar Radiation Data: The SiteAdapt Procedure. Remote Sens. 2020, 12, 2127.
 }
 \keyword{datasets}

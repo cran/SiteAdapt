@@ -17,3 +17,6 @@ Relative air mass based on Kasten parametrization
 \description{
 Calculation of relative air mass based on Kasten parametrization
 }
+\references{
+Kasten, F. A simple parameterization of the phyrheliometric formula for determining the Linke turbidity factor. Meteorol. Rdsch. 1980, 33, 124–127.
+}
